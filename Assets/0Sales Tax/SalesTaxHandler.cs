@@ -4,18 +4,38 @@ using UnityEngine;
 
 public class SalesTaxHandler : MonoBehaviour
 {
+    public static SalesTaxHandler instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+
     public List<PurchasedItemData> purchasedItemList = new List<PurchasedItemData>();
     public GameObject productUIPrefab;
     public Transform productContainer;
-   
-    // Start is called before the first frame update
-    void Start()
+    public GameObject inputScreen;
+    public GameObject outputScreen;
+
+    public void OutputBackScreen()
     {
-        CreateInvoice();    
+        purchasedItemList.Clear();
+        Start();
     }
 
-    void CreateInvoice()
+    private void Start()
     {
+        inputScreen.SetActive(true); 
+        outputScreen.SetActive(false);
+    }
+
+    public void CreateInvoice()
+    { 
+        foreach (Transform item in productContainer)
+        {
+            Destroy(item.gameObject);
+        }
+        inputScreen.SetActive(false);
+        outputScreen.SetActive(true);
         int totalQty = 0;
         float totalBill = 0;
         float totalTax = 0;
@@ -76,6 +96,7 @@ public class PurchasedItemData
 }
 public enum ProductCategory
 {
+    None,
     Food,
     Medicines,
     Book,
